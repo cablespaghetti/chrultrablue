@@ -35,7 +35,7 @@ modules:
       # Disable weak dependencies to reduce image size and build time
       install-weak-deps: false
       packages:
-        # Terra again...
+        # Gets the keys for terra which we need for keyd
         - terra-release
 
         # Terminal and shell utilities
@@ -48,6 +48,7 @@ modules:
         - tar
         - unzip
         - wget
+        - keyd
 
         # Development tools
         - cargo
@@ -171,7 +172,6 @@ modules:
         - plymouth-core-libs
         - plymouth-scripts
         - plymouth-system-theme
-        - keyd
 
   - type: files
     files:
