@@ -172,6 +172,11 @@ modules:
         - plymouth-core-libs
         - plymouth-scripts
         - plymouth-system-theme
+    remove:
+      packages:
+        - firefox
+        - firefox-langpacks
+        - NetworkManager*
 
   - type: files
     files:
@@ -183,6 +188,8 @@ modules:
       - git clone https://github.com/elpritchos/omadora.git /etc/skel/.local/share/omadora
       - chmod +x /usr/bin/omadora-build-time-setup.sh
       - /usr/bin/omadora-build-time-setup.sh /etc/skel/.local/share/omadora
+      - sed -i 's/env = GDK_SCALE,2/env = GDK_SCALE,1/' /etc/skel/.config/hypr/monitors.conf
+      - sed -i 's/monitor=,preferred,auto,auto/monitor=,preferred,auto,1/' /etc/skel/.config/hypr/monitors.conf
 
   - type: script
     snippets:
@@ -216,20 +223,10 @@ modules:
     snippets:
       - echo 'exec-once = sleep 2 && $HOME/.local/share/omadora/install/config/detect-keyboard-layout.sh' >> /etc/skel/.config/hypr/autostart.conf
 
-  - type: files
-    files:
-      - source: scripts/omazzite-personal-setup
-        destination: /usr/bin/omazzite-personal-setup
-
-  - type: script
-    snippets:
-      - chmod +x /usr/bin/omazzite-personal-setup
-
   # I know I have employed many hacks to get this script to run, but I really like this script
   - type: script
     snippets:
       - git clone https://github.com/WeirdTreeThing/cros-keyboard-map.git
-
       - cd cros-keyboard-map && sed -i 's/systemctl restart keyd/echo insert hack here/' install.sh && echo | ./install.sh
 
   - type: brew

@@ -1,6 +1,6 @@
 # Chrultrablue (working title) &nbsp; [![bluebuild build badge](https://github.com/cablespaghetti/chrultrablue/actions/workflows/build.yml/badge.svg)](https://github.com/cablespaghetti/chrultrablue/actions/workflows/build.yml)
 
-Yet another attempt at trying to build a Universal Blue image targeted at my collection of shit end of life Chromebooks. This one is based on the hyprland image from https://github.com/wayblueorg/wayblue. Please do not use it, it is likely I will lose interest in maintaining it!
+Yet another attempt at trying to build a Universal Blue image targeted at my collection of shit end of life Chromebooks. This one is hyprland based. Please do not use it, it is likely I will lose interest in maintaining it!
 
 Currently lifting a lot of stuff from https://github.com/R-Dson/omazzite and https://github.com/elpritchos/omadora.
 
