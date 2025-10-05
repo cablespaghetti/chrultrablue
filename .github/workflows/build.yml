@@ -41,4 +41,4 @@ jobs:
           maximize_build_space: false
 
           # temporarily skip validation to work around issue 
-          build_opts: "--skip-validation=true"
+          build_opts: "--skip-validation"
