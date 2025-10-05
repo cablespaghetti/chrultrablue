@@ -58,7 +58,6 @@ modules:
         - bind-utils
         - brightnessctl
         - btop
-        - fastfetch
         - iputils
         - pciutils
         - plocate
@@ -159,12 +158,6 @@ modules:
         - upower
         - yad
         - sddm
-
-        # Boot and system
-        - plymouth
-        - plymouth-core-libs
-        - plymouth-scripts
-        - plymouth-system-theme
     remove:
       packages:
         - firefox
@@ -236,11 +229,16 @@ modules:
     nofile-limits: true # increase nofile limits
     auto-upgrade: false # don't want auto upgrades on low end machines
 
-
   - type: dnf
     install:
       packages:
-        - bluefin
+        - bluefin-fastfetch
+        - bluefin-faces
+        - bluefin-cli-logos
+        - bluefin-logos
+        - bluefin-schemas
+        - bluefin-plymouth
+        - bluefin-backgrounds
 
   - type: files
     files:
