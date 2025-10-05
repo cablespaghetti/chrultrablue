@@ -51,6 +51,7 @@ modules:
         - bind-utils
         - brightnessctl
         - btop
+        - fastfetch
         - iputils
         - pciutils
         - plocate
@@ -147,6 +148,12 @@ modules:
         - upower
         - yad
         - sddm
+
+        # Boot and system
+        - plymouth
+        - plymouth-core-libs
+        - plymouth-scripts
+        - plymouth-system-theme
     remove:
       packages:
         - firefox
