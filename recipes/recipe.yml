@@ -189,6 +189,11 @@ modules:
       - source: customisations/waybar-style.css
         destination: /etc/skel/.config/waybar/style.css
 
+  - type: files
+    files:
+      - source: customisations/autostart.conf
+        destination: /etc/skel/.config/hypr/autostart.conf
+
   - type: systemd
     system:
       enabled:
@@ -212,12 +217,6 @@ modules:
   - type: script
     snippets:
       - chmod +x /usr/bin/omadora-waybar-update
-
-  - type: script
-    snippets:
-      - echo 'exec-once = sleep 2 && $HOME/.local/share/omadora/install/config/detect-keyboard-layout.sh' >> /etc/skel/.config/hypr/autostart.conf
-      - sed -i '/.*swaybg.*/d' /etc/skel/config/hypr/autostart.conf
-      - echo 'exec-once = uwsm app -- ln -sf /usr/share/backgrounds/bluefin/$(date +%m)-bluefin-night.jxl ~/.config/omadora/current/background && swaybg -i ~/.config/omadora/current/background -m fill' >> /etc/skel/config/hypr/autostart.conf
 
   # I know I have employed many hacks to get this script to run, but I really like this script
   - type: script
