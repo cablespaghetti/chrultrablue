@@ -237,15 +237,18 @@ modules:
     auto-upgrade: false # don't want auto upgrades on low end machines
 
   - type: dnf
-    remove:
-      packages:
-        - fedora-logos
+    replace:
+      - from-repo: copr:copr.fedorainfracloud.org:ublue-os:packages
+        packages:
+          - old: fedora-logos
+            new: bluefin-logos
+
+  - type: dnf
     install:
       packages:
         - bluefin-fastfetch
         - bluefin-faces
         - bluefin-cli-logos
-        - bluefin-logos
         - bluefin-schemas
         - bluefin-plymouth
         - bluefin-backgrounds
