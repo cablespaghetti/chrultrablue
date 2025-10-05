@@ -185,10 +185,13 @@ modules:
       - git clone https://github.com/elpritchos/omadora.git /etc/skel/.local/share/omadora
       - chmod +x /usr/bin/omadora-build-time-setup.sh
       - /usr/bin/omadora-build-time-setup.sh /etc/skel/.local/share/omadora
+      # Disable hidpi by default
       - sed -i 's/env = GDK_SCALE,2/env = GDK_SCALE,1/' /etc/skel/.config/hypr/monitors.conf
       - sed -i 's/monitor=,preferred,auto,auto/monitor=,preferred,auto,1/' /etc/skel/.config/hypr/monitors.conf
+      # Disable alias for neovim
       - sed -i '/.*nvim.*/d' /etc/skel/.local/share/omadora/default/bash/aliases
-
+      # Install bitwarden by default
+      - sed -i 's$latest.xpi"$latest.xpi", "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi"$' /usr/share/librewolf/distribution/policies.json
   - type: files
     files:
       - source: customisations/waybar-style.css
