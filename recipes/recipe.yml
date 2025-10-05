@@ -214,6 +214,13 @@ modules:
       - git clone https://github.com/WeirdTreeThing/cros-keyboard-map.git
       - cd cros-keyboard-map && sed -i 's/systemctl restart keyd/echo insert hack here/' install.sh && echo | ./install.sh
 
+  # Disable automatic updates by default due to limited performance
+  - type: script
+    snippets:
+      - rm /etc/systemd/system/timers.target.wants/flatpak-system-update.timer
+      - rm /etc/systemd/system/timers.target.wants/rpm-ostreed-automatic.timer
+      - rm /etc/systemd/user/timers.target.wants/flatpak-user-update.timer
+
   - type: brew
     nofile-limits: true # increase nofile limits
     auto-upgrade: false # don't want auto upgrades on low end machines
