@@ -77,7 +77,8 @@ sed -i 's/ --quiet//g' "$SKEL_DIR/.config/uwsm/env"
 
 echo "Appending configurations to Hyprland config files in $SKEL_DIR..."
 echo 'bind = SUPER, F4, exec, pavucontrol' >> "$SKEL_DIR/.config/hypr/bindings/media.conf"
-echo 'exec-once = sleep 2 && pkill -x "waybar" && setsid uwsm app -- "waybar" >/dev/null 2>&1 &' >> "$SKEL_DIR/.config/hypr/autostart.conf"
+sed -i '/^exec-once.*waybar/d' "$SKEL_DIR/.config/hypr/autostart.conf"
+echo 'exec-once = setsid uwsm app -- "waybar" >/dev/null 2>&1 &' >> "$SKEL_DIR/.config/hypr/autostart.conf"
 
 echo "Updating Waybar config in omadora repository..."
 # Create temporary file for jq output to avoid issues with in-place editing
@@ -93,3 +94,4 @@ ln -snf "$SKEL_DIR/.config/omadora/current/theme/btop.theme" "$SKEL_DIR/.config/
 ln -snf "$SKEL_DIR/.config/omadora/current/theme/mako.ini" "$SKEL_DIR/.config/mako/config"
 
 echo "Build-time setup complete."
+
