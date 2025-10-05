@@ -191,6 +191,11 @@ modules:
       - sed -i 's/env = GDK_SCALE,2/env = GDK_SCALE,1/' /etc/skel/.config/hypr/monitors.conf
       - sed -i 's/monitor=,preferred,auto,auto/monitor=,preferred,auto,1/' /etc/skel/.config/hypr/monitors.conf
 
+  - type: files
+    files:
+      - source: customisations/waybar-style.css
+        destination: /etc/skel/.config/waybar/style.css
+
   - type: script
     snippets:
       - cargo install --root /usr bluetui cargo-update eza impala

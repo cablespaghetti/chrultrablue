@@ -9,13 +9,13 @@ set -oue pipefail
 OMADORA_REPO_PATH="${1:-/etc/skel/.local/share/omadora}"
 
 if [ -z "$1" ]; then
-    echo "No omadora repository path provided. Defaulting to $OMADORA_REPO_PATH."
+  echo "No omadora repository path provided. Defaulting to $OMADORA_REPO_PATH."
 fi
 
 if [ ! -d "$OMADORA_REPO_PATH" ]; then
-    echo "Error: Omadora repository not found at $OMADORA_REPO_PATH"
-    echo "Please ensure the omadora repository is cloned to this location."
-    exit 1
+  echo "Error: Omadora repository not found at $OMADORA_REPO_PATH"
+  echo "Please ensure the omadora repository is cloned to this location."
+  exit 1
 fi
 
 SKEL_DIR="/etc/skel"
@@ -41,14 +41,6 @@ cp "$OMADORA_REPO_PATH/applications/icons/"*.png "$SKEL_DIR/.local/share/applica
 cp "$OMADORA_REPO_PATH/icon.txt" "$SKEL_DIR/.config/omadora/branding/about.txt"
 cp "$OMADORA_REPO_PATH/logo.txt" "$SKEL_DIR/.config/omadora/branding/screensaver.txt"
 
-echo "Cloning LazyVim starter into $SKEL_DIR/.config/nvim..."
-rm -rf "$SKEL_DIR/.config/nvim"
-git clone https://github.com/LazyVim/starter "$SKEL_DIR/.config/nvim"
-rm -rf "$SKEL_DIR/.config/nvim/.git"
-
-# echo "Copying custom LazyVim configurations..."
-# cp -rf "$OMADORA_REPO_PATH/config/nvim/"* "$SKEL_DIR/.config/nvim/"
-
 echo "Installing user-specific packages..."
 pipx install terminaltexteffects
 
@@ -61,37 +53,35 @@ echo "Setting permissions for omadora binaries..."
 chmod +x "$OMADORA_REPO_PATH/bin/"*
 
 echo "Creating dummy/modified scripts in omadora repository..."
-echo -e '#!/bin/bash\nexit 0' > "$OMADORA_REPO_PATH/bin/omadora-migrate"
-sed -i '1,$d' "$OMADORA_REPO_PATH/bin/omadora-pkg-install" && echo -e '#!/bin/bash\nexit 0' > "$OMADORA_REPO_PATH/bin/omadora-pkg-install"
-sed -i '1,$d' "$OMADORA_REPO_PATH/bin/omadora-update-system-pkgs" && echo -e '#!/bin/bash\nexit 0' > "$OMADORA_REPO_PATH/bin/omadora-update-system-pkgs"
-sed -i '1,$d' "$OMADORA_REPO_PATH/bin/omadora-pkg-remove" && echo -e '#!/bin/bash\nexit 0' > "$OMADORA_REPO_PATH/bin/omadora-pkg-remove"
+echo -e '#!/bin/bash\nexit 0' >"$OMADORA_REPO_PATH/bin/omadora-migrate"
+sed -i '1,$d' "$OMADORA_REPO_PATH/bin/omadora-pkg-install" && echo -e '#!/bin/bash\nexit 0' >"$OMADORA_REPO_PATH/bin/omadora-pkg-install"
+sed -i '1,$d' "$OMADORA_REPO_PATH/bin/omadora-update-system-pkgs" && echo -e '#!/bin/bash\nexit 0' >"$OMADORA_REPO_PATH/bin/omadora-update-system-pkgs"
+sed -i '1,$d' "$OMADORA_REPO_PATH/bin/omadora-pkg-remove" && echo -e '#!/bin/bash\nexit 0' >"$OMADORA_REPO_PATH/bin/omadora-pkg-remove"
 chmod +x "$OMADORA_REPO_PATH/bin/omadora-pkg-install"
 
 echo "Creating power profile scripts in omadora repository..."
-echo -e "#!/bin/bash\nprofile=\"\$1\"\nif sudo tuned-adm profile \"\$profile\"; then\n    notify-send -a \"PowerProfiles\" \"Power profile set to '\$profile'\"\nelse\n    notify-send -a \"PowerProfiles\" \"Failed to set power profile to '\$profile'\"\n    exit 1\nfi" > "$OMADORA_REPO_PATH/bin/omadora-powerprofiles-set" && chmod +x "$OMADORA_REPO_PATH/bin/omadora-powerprofiles-set"
-echo -e '#!/bin/bash\ntuned-adm list | awk '\''/^ *- / {print}'\'' | sed -E '\''s/^ *- ([^[:space:]]+).*$/\1/'\'' | xargs -n1' > "$OMADORA_REPO_PATH/bin/omadora-powerprofiles-list" && chmod +x "$OMADORA_REPO_PATH/bin/omadora-powerprofiles-list"
+echo -e "#!/bin/bash\nprofile=\"\$1\"\nif sudo tuned-adm profile \"\$profile\"; then\n    notify-send -a \"PowerProfiles\" \"Power profile set to '\$profile'\"\nelse\n    notify-send -a \"PowerProfiles\" \"Failed to set power profile to '\$profile'\"\n    exit 1\nfi" >"$OMADORA_REPO_PATH/bin/omadora-powerprofiles-set" && chmod +x "$OMADORA_REPO_PATH/bin/omadora-powerprofiles-set"
+echo -e '#!/bin/bash\ntuned-adm list | awk '\''/^ *- / {print}'\'' | sed -E '\''s/^ *- ([^[:space:]]+).*$/\1/'\'' | xargs -n1' >"$OMADORA_REPO_PATH/bin/omadora-powerprofiles-list" && chmod +x "$OMADORA_REPO_PATH/bin/omadora-powerprofiles-list"
 
 echo "Applying sed modifications to omadora scripts and configs..."
 sed -i 's/$(powerprofilesctl get)/$(tuned-adm active | awk '\''{print $NF}'\'')/g' "$OMADORA_REPO_PATH/bin/omadora-menu"
 sed -i 's/ --quiet//g' "$SKEL_DIR/.config/uwsm/env"
 
 echo "Appending configurations to Hyprland config files in $SKEL_DIR..."
-echo 'bind = SUPER, F4, exec, pavucontrol' >> "$SKEL_DIR/.config/hypr/bindings/media.conf"
+echo 'bind = SUPER, F4, exec, pavucontrol' >>"$SKEL_DIR/.config/hypr/bindings/media.conf"
 sed -i '/^exec-once.*waybar/d' "$SKEL_DIR/.config/hypr/autostart.conf"
-echo 'exec-once = setsid uwsm app -- "waybar" >/dev/null 2>&1 &' >> "$SKEL_DIR/.config/hypr/autostart.conf"
+echo 'exec-once = setsid uwsm app -- "waybar" >/dev/null 2>&1 &' >>"$SKEL_DIR/.config/hypr/autostart.conf"
 
 echo "Updating Waybar config in omadora repository..."
 # Create temporary file for jq output to avoid issues with in-place editing
-jq '(.["modules-center"][] | select(."custom/update"))["custom/update"] = { "exec": "/usr/bin/omadora-waybar-update", "on-click": "/usr/bin/omadora-waybar-update --launch-update", "return-type": "json", "interval": 3600 }' "$OMADORA_REPO_PATH/config/waybar/config.jsonc" > /tmp/waybar.jsonc && mv /tmp/waybar.jsonc "$OMADORA_REPO_PATH/config/waybar/config.jsonc"
+jq '(.["modules-center"][] | select(."custom/update"))["custom/update"] = { "exec": "/usr/bin/omadora-waybar-update", "on-click": "/usr/bin/omadora-waybar-update --launch-update", "return-type": "json", "interval": 3600 }' "$OMADORA_REPO_PATH/config/waybar/config.jsonc" >/tmp/waybar.jsonc && mv /tmp/waybar.jsonc "$OMADORA_REPO_PATH/config/waybar/config.jsonc"
 
 echo "Copying Omadora themes..."
 # Copy all themes from the cloned omadora repository to the user's config directory.
 cp -r "$OMADORA_REPO_PATH/themes/"* "$SKEL_DIR/.config/omadora/themes/"
 ln -snf "$OMADORA_REPO_PATH/themes/rose-pine-darker" "$SKEL_DIR/.config/omadora/current/theme"
 ln -snf "$SKEL_DIR/.config/omadora/current/theme/backgrounds/01_background.png" "$SKEL_DIR/.config/omadora/current/background"
-ln -snf "$SKEL_DIR/.config/omadora/current/theme/neovim.lua" "$SKEL_DIR/.config/nvim/lua/plugins/theme.lua"
 ln -snf "$SKEL_DIR/.config/omadora/current/theme/btop.theme" "$SKEL_DIR/.config/btop/themes/current.theme"
 ln -snf "$SKEL_DIR/.config/omadora/current/theme/mako.ini" "$SKEL_DIR/.config/mako/config"
 
 echo "Build-time setup complete."
-
