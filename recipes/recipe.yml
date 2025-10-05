@@ -28,6 +28,7 @@ modules:
         - solopasha/hyprland
         - atim/starship
         - scottames/ghostty
+        - ublue-os/packages
       files:
         - https://repo.librewolf.net/librewolf.repo
         - https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo # For keyd
@@ -192,6 +193,7 @@ modules:
       - sed -i '/.*nvim.*/d' /etc/skel/.local/share/omadora/default/bash/aliases
       # Install bitwarden by default
       - sed -i 's$latest.xpi"$latest.xpi", "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi"$' /usr/share/librewolf/distribution/policies.json
+
   - type: files
     files:
       - source: customisations/waybar-style.css
@@ -238,5 +240,13 @@ modules:
   - type: brew
     nofile-limits: true # increase nofile limits
     auto-upgrade: false # don't want auto upgrades on low end machines
+
+
+  - type: dnf
+    install:
+      packages:
+        - bluefin
+
+  - type: initramfs
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
