@@ -58,9 +58,6 @@ modules:
         - openssl-devel
         - libxcb-devel
 
-        # Text editors and IDEs
-        - neovim
-
         # System utilities
         - bind-utils
         - brightnessctl
@@ -190,6 +187,7 @@ modules:
       - /usr/bin/omadora-build-time-setup.sh /etc/skel/.local/share/omadora
       - sed -i 's/env = GDK_SCALE,2/env = GDK_SCALE,1/' /etc/skel/.config/hypr/monitors.conf
       - sed -i 's/monitor=,preferred,auto,auto/monitor=,preferred,auto,1/' /etc/skel/.config/hypr/monitors.conf
+      - sed -i '/.*nvim.*/d' /etc/skel/.local/share/omadora/default/bash/aliases
 
   - type: files
     files:
@@ -236,5 +234,6 @@ modules:
 
   - type: brew
     nofile-limits: true # increase nofile limits
+    auto-upgrade: false # don't want auto upgrades on low end machines
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
