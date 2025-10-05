@@ -224,6 +224,9 @@ modules:
     auto-upgrade: false # don't want auto upgrades on low end machines
 
   - type: dnf
+    remove:
+      packages:
+        - fedora-logos
     install:
       packages:
         - bluefin-fastfetch
