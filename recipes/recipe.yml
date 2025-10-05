@@ -22,7 +22,6 @@ modules:
       copr:
         - solopasha/hyprland
         - atim/starship
-        - scottames/ghostty
         - ublue-os/packages
       files:
         - https://repo.librewolf.net/librewolf.repo
@@ -37,7 +36,6 @@ modules:
         # Terminal and shell utilities
         - starship
         - alacritty
-        - ghostty
 
         # File managers and utilities
         - ripgrep
@@ -135,13 +133,9 @@ modules:
         - curl
         - rsync
         - tmux
-        - npm
-        - meson
-        - scdoc
         - pyprland
         - python3-pillow
         - python3-psutil
-        - foot
         - jetbrains-mono-fonts
         - qt5ct
         - qt6ct
@@ -171,6 +165,10 @@ modules:
 
   - type: script
     snippets:
+      - cargo install --root /usr bluetui cargo-update eza impala
+
+  - type: script
+    snippets:
       - git clone https://github.com/elpritchos/omadora.git /etc/skel/.local/share/omadora
       - chmod +x /usr/bin/omadora-build-time-setup.sh
       - /usr/bin/omadora-build-time-setup.sh /etc/skel/.local/share/omadora
@@ -186,10 +184,6 @@ modules:
     files:
       - source: customisations/waybar-style.css
         destination: /etc/skel/.config/waybar/style.css
-
-  - type: script
-    snippets:
-      - cargo install --root /usr bluetui cargo-update eza impala
 
   - type: systemd
     system:
